@@ -4,7 +4,7 @@ Bem-vindo! Este documento explica **como manter o site atualizado** mesmo se voc
 
 ---
 
-## 📁 Estrutura do projeto
+## 📁 Estrutura do projeto!
 
 ```
 saude-digital-pirai/
