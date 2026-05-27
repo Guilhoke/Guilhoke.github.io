@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ouvidoria | Saúde Digital Piraí</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/estilo.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <div class="breadcrumb">
+    <div class="container">
+      <a href="../index.html">Início</a>
+      <span class="sep">›</span>
+      <span class="atual">Ouvidoria</span>
+    </div>
+  </div>
+
+  <section class="hero-pagina">
+    <div class="container">
+      <h1>Ouvidoria</h1>
+      <p>Sua voz é importante para melhorarmos os serviços de saúde</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:3rem" class="ouvidoria-grid">
+        <div>
+          <h2 style="color:var(--cor-primaria-escura);margin-bottom:1rem;font-size:1.75rem">Envie sua mensagem</h2>
+          <p style="color:var(--cor-texto-claro);margin-bottom:2rem">Use este formulário para fazer elogios, sugestões, reclamações ou denúncias relacionadas aos serviços de saúde do município.</p>
+
+          <form class="form-ouvidoria" id="form-ouvidoria">
+            <div class="form-grid-2">
+              <div class="campo">
+                <label for="nome">Nome completo *</label>
+                <input type="text" id="nome" name="nome" required />
+              </div>
+              <div class="campo">
+                <label for="email">E-mail *</label>
+                <input type="email" id="email" name="email" required />
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="campo">
+                <label for="telefone">Telefone</label>
+                <input type="tel" id="telefone" name="telefone" />
+              </div>
+              <div class="campo">
+                <label for="tipo">Tipo de manifestação *</label>
+                <select id="tipo" name="tipo" required>
+                  <option value="">Selecione...</option>
+                  <option>Elogio</option>
+                  <option>Sugestão</option>
+                  <option>Reclamação</option>
+                  <option>Denúncia</option>
+                  <option>Solicitação de Informação</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="campo">
+              <label for="unidade">Unidade de saúde envolvida</label>
+              <input type="text" id="unidade" name="unidade" placeholder="Ex.: USF Centro, Hospital Flávio Leal..." />
+            </div>
+
+            <div class="campo">
+              <label for="mensagem">Sua mensagem *</label>
+              <textarea id="mensagem" name="mensagem" required placeholder="Descreva sua manifestação com o máximo de detalhes..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primario" style="background:var(--cor-primaria);color:white;width:100%;padding:1rem">Enviar mensagem</button>
+          </form>
+        </div>
+
+        <div>
+          <div style="background:var(--cor-primaria);color:white;padding:2rem;border-radius:12px;margin-bottom:1.5rem">
+            <h3 style="color:white;font-size:1.2rem;margin-bottom:1rem">📞 Contato direto</h3>
+            <p style="margin-bottom:1.25rem;opacity:0.95">Você também pode entrar em contato diretamente:</p>
+            <p style="margin-bottom:0.85rem"><strong style="color:var(--cor-amarelo)">Ouvidoria da Saúde</strong><br>2411-9328</p>
+            <p style="margin-bottom:0.85rem"><strong style="color:var(--cor-amarelo)">Ouvidoria HFL</strong><br>2411-9475</p>
+            <p><strong style="color:var(--cor-amarelo)">Secretaria de Saúde</strong><br>24-2411-9300</p>
+          </div>
+
+          <div class="bloco-info">
+            <strong>🔒 Sigilo garantido</strong>
+            <p style="margin-top:0.5rem;font-size:0.92rem">Sua identidade é protegida. Manifestações anônimas também são aceitas, mas o retorno depende dos dados informados.</p>
+          </div>
+
+          <div class="bloco-info" style="border-left-color:var(--cor-primaria)">
+            <strong>⏱ Prazo de resposta</strong>
+            <p style="margin-top:0.5rem;font-size:0.92rem">As manifestações são respondidas em até <strong>20 dias úteis</strong>, conforme legislação vigente.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+
+  <script src="../js/dados.js"></script>
+  <script src="../js/componentes.js"></script>
+  <script src="../js/script.js"></script>
+</body>
+</html>
