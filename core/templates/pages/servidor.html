@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Servidor | Saúde Digital Piraí{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb">
+    <div class="container">
+        <a href="{% url 'home' %}">Início</a>
+        <span class="sep">›</span>
+        <span class="atual">Servidor</span>
+    </div>
+</div>
+
+<section class="hero-pagina">
+    <div class="container">
+        <h1>Portal do Servidor</h1>
+        <p>Informações e serviços para os profissionais da Saúde de Piraí</p>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+
+        <div class="titulo-secao">
+            <h2>Serviços ao Servidor</h2>
+            <p>Acesse informações e ferramentas destinadas aos profissionais da rede municipal.</p>
+        </div>
+
+        <div class="grid-servicos" style="margin-top:2.5rem">
+
+            <a href="#" class="card-servico">
+                <div class="icone">📋</div>
+                <h3>Escala de Trabalho</h3>
+                <p>Consulte sua escala mensal e turnos.</p>
+                <span class="acessar">Em breve →</span>
+            </a>
+
+            <a href="#" class="card-servico">
+                <div class="icone">💰</div>
+                <h3>Contracheque</h3>
+                <p>Acesso ao contracheque online.</p>
+                <span class="acessar">Em breve →</span>
+            </a>
+
+            <a href="#" class="card-servico">
+                <div class="icone">📅</div>
+                <h3>Banco de Horas</h3>
+                <p>Consulte seu banco de horas e folgas.</p>
+                <span class="acessar">Em breve →</span>
+            </a>
+
+            <a href="#" class="card-servico">
+                <div class="icone">🎓</div>
+                <h3>Capacitações</h3>
+                <p>Cursos e capacitações disponíveis.</p>
+                <span class="acessar">Em breve →</span>
+            </a>
+
+            <a href="#" class="card-servico">
+                <div class="icone">📞</div>
+                <h3>RH da Saúde</h3>
+                <p>Contato direto com o setor de Recursos Humanos.</p>
+                <span class="acessar">Em breve →</span>
+            </a>
+
+            <a href="#" class="card-servico">
+                <div class="icone">📰</div>
+                <h3>Comunicados Internos</h3>
+                <p>Avisos e informes da SMS.</p>
+                <span class="acessar">Em breve →</span>
+            </a>
+
+        </div>
+
+        <div class="conteudo-pagina" style="margin-top:3rem">
+
+            <h2>PET-Saúde: integração ensino-serviço</h2>
+
+            <p>
+                Servidores da rede que atuam como preceptores no PET-Saúde têm acesso
+                a materiais, encontros formativos e à comunidade integrada de
+                aprendizagem. Saiba mais na nossa
+                <a href="{% url 'profissionais' %}">página de Profissionais</a>.
+            </p>
+
+            <div class="bloco-info">
+                <strong>🔐 Acesso aos sistemas internos</strong>
+
+                <p style="margin-top:0.5rem">
+                    Os sistemas funcionais (escala, contracheque, banco de horas)
+                    serão integrados em breve. No momento, procure o RH da Secretaria
+                    de Saúde pelo telefone <strong>24-2411-9300</strong> ou pessoalmente
+                    na Rua Moacyr Barbosa, nº 98.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
