@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Busca | Saúde Digital Piraí{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb">
+    <div class="container">
+        <a href="{% url 'home' %}">Início</a>
+        <span class="sep">›</span>
+        <span class="atual">Resultados da Busca</span>
+    </div>
+</div>
+
+<section class="hero-pagina">
+    <div class="container">
+        <h1>Resultados da Busca</h1>
+
+        ```
+        <p>
+            Você buscou por:
+            "<span style="color: var(--cor-amarelo)">{{ termo }}</span>"
+        </p>
+    </div>
+    ```
+
+</section>
+
+<section>
+    <div class="container">
+        <div class="conteudo-pagina">
+
+            ```
+            {% if not termo %}
+            <div class="bloco-info">
+                <strong>
+                    Digite algo na barra de pesquisa para começar.
+                </strong>
+            </div>
+
+            {% elif resultados %}
+
+            <p style="margin-bottom: 1.5rem; color: var(--cor-texto-claro)">
+                {{ resultados|length }} resultado(s) encontrado(s)
+            </p>
+
+            <div id="resultados-busca">
+
+                {% for resultado in resultados %}
+                <article class="resultado-busca">
+
+                    <span class="tipo">
+                        {{ resultado.tipo }}
+                    </span>
+
+                    <h2>
+                        <a href="{{ resultado.link }}">
+                            {{ resultado.titulo }}
+                        </a>
+                    </h2>
+
+                    <p>
+                        {{ resultado.descricao }}
+                    </p>
+
+                </article>
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="bloco-info">
+                <strong>
+                    Nenhum resultado encontrado para
+                    "{{ termo }}".
+                </strong>
+
+                <p style="margin-top: 0.5rem">
+                    Tente buscar por palavras como:
+                    vacina, unidade, exames, mamografia, CAPS, etc.
+                </p>
+            </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+    ```
+
+</section>
+
+{% endblock %}

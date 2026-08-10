@@ -6,7 +6,18 @@ def home(request):
 
 
 def busca(request):
-    return render(request, "pages/busca.html")
+    termo = request.GET.get("q", "").strip().lower()
+
+    resultados = []
+
+    return render(
+        request,
+        "pages/busca.html",
+        {
+            "termo": termo,
+            "resultados": resultados, 
+        }
+    )
 
 
 def duvidas(request):
