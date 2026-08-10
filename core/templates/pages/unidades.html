@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Unidades | Saúde Digital Piraí{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb">
+    <div class="container">
+        <a href="{% url 'home' %}">Início</a>
+        <span class="sep">›</span>
+        <span class="atual">Unidades</span>
+    </div>
+</div>
+
+<section class="hero-pagina">
+    <div class="container">
+        <h1>Unidades de Saúde</h1>
+        <p>
+            Encontre unidades, serviços e contatos da rede municipal de saúde.
+        </p>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+
+        <div class="titulo-secao">
+            <h2>Rede Municipal de Saúde</h2>
+            <p>
+                Consulte as unidades de saúde de Piraí e encontre a mais próxima de você.
+            </p>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="filtro-unidades">
+            <button class="ativo" data-filtro="todos">
+                Todas
+            </button>
+
+            <button data-filtro="Hospital">
+                Hospitais
+            </button>
+
+            <button data-filtro="Unidade de Saúde da Família">
+                USF
+            </button>
+
+            <button data-filtro="Centro Especializado">
+                Especializados
+            </button>
+
+            <button data-filtro="Pronto Socorro">
+                Pronto Socorro
+            </button>
+
+            <button data-filtro="Vigilância em Saúde">
+                Vigilância
+            </button>
+        </div>
+
+        <div id="grid-unidades" class="grid-unidades">
+
+            {% if unidades %}
+
+            {% for unidade in unidades %}
+
+            <article class="card-unidade fade-up" data-tipo="{{ unidade.tipo }}">
+
+                <div class="imagem-unidade">
+
+                    {% if unidade.tipo == "Hospital" %}
+                    🏥
+                    {% elif unidade.tipo == "Unidade de Saúde da Família" %}
+                    🏠
+                    {% elif unidade.tipo == "Unidade de Saúde" %}
+                    🏥
+                    {% elif unidade.tipo == "Centro Especializado" %}
+                    ⚕️
+                    {% elif unidade.tipo == "Pronto Socorro" %}
+                    🚑
+                    {% elif unidade.tipo == "Serviço Especializado" %}
+                    🩺
+                    {% elif unidade.tipo == "Vigilância em Saúde" %}
+                    🔬
+                    {% else %}
+                    🏥
+                    {% endif %}
+
+                    <span class="tipo-tag">
+                        {{ unidade.tipo }}
+                    </span>
+
+                </div>
+
+                <div class="conteudo-unidade">
+
+                    <h3>{{ unidade.nome }}</h3>
+
+                    <div class="info-linha">
+                        <span class="ico">📍</span>
+                        <span>{{ unidade.endereco }}</span>
+                    </div>
+
+                    {% if unidade.telefone %}
+                    <div class="info-linha">
+                        <span class="ico">📞</span>
+                        <span>{{ unidade.telefone }}</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="acoes">
+
+                        <a href="https://www.google.com/maps/search/?api=1&query={{ unidade.lat }},{{ unidade.lng }}"
+                            target="_blank" rel="noopener">
+                            Ver no Mapa
+                        </a>
+
+                        {% if unidade.telefone %}
+                        <a href="tel:{{ unidade.telefone }}">
+                            Ligar
+                        </a>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+            {% else %}
+
+            <div class="bloco-info">
+                <strong>Nenhuma unidade encontrada.</strong>
+                <p style="margin-top:0.5rem">
+                    Não há unidades cadastradas no momento.
+                </p>
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        <div class="bloco-info" style="margin-top:3rem">
+            <strong>📌 Sobre os mapas:</strong>
+
+            <p style="margin-top:0.5rem">
+                Ao clicar em "Ver no Mapa", você será direcionado ao Google Maps
+                com a localização da unidade. As coordenadas são aproximadas —
+                em caso de dúvida, entre em contato pelo telefone informado.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

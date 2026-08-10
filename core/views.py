@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from .data.unidades import UNIDADES
+
 
 
 def home(request):
@@ -56,4 +58,10 @@ def transparencia(request):
 
 
 def unidades(request):
-    return render(request, "pages/unidades.html")
+    return render(
+        request,
+        "pages/unidades.html",
+        {
+            "unidades": UNIDADES,
+        },
+    )
