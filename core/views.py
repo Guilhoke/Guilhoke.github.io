@@ -25,7 +25,14 @@ def duvidas(request):
 
 
 def eventos(request):
-    return render(request, "pages/eventos.html")
+    return render(
+        request,
+        "pages/eventos.html",
+        {
+            "eventos": [],
+            "noticias": [],
+        },
+    )
 
 
 def ouvidoria(request):
