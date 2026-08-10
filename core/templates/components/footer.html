@@ -1,0 +1,99 @@
+{% load static %}
+
+<footer class="rodape">
+  <div class="container">
+    <div class="rodape-grid">
+      <div>
+        <h4>Saúde Digital Piraí</h4>
+
+        <p style="line-height: 1.7">
+          Portal oficial da Secretaria Municipal de Saúde de Piraí. Informação,
+          serviços e cuidado para todos os munícipes.
+        </p>
+
+        <p style="margin-top: 1rem">
+          <strong style="color: white"> 📞 24-2411-9300 </strong>
+        </p>
+      </div>
+
+      <div>
+        <h4>Acesso Rápido</h4>
+
+        <ul>
+          <li>
+            <a href="{% url 'servicos' %}"> Serviços </a>
+          </li>
+
+          <li>
+            <a href="{% url 'unidades' %}"> Unidades de Saúde </a>
+          </li>
+
+          <li>
+            <a href="{% url 'eventos' %}"> Eventos </a>
+          </li>
+
+          <li>
+            <a href="{% url 'ouvidoria' %}"> Ouvidoria </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Para o Cidadão</h4>
+
+        <ul>
+          <li>
+            <a
+              href="https://www.netlaudo.com.br/consulta/home/netlaudo.aspx"
+              target="_blank"
+              rel="noopener"
+            >
+              Resultados de Exames
+            </a>
+          </li>
+
+          <li>
+            <a href="{% url 'duvidas' %}"> Dúvidas Frequentes </a>
+          </li>
+
+          <li>
+            <a href="{% url 'transparencia' %}"> Transparência </a>
+          </li>
+
+          <li>
+            <a href="{% url 'profissionais' %}"> Profissionais </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Para o Servidor</h4>
+
+        <ul>
+          <li>
+            <a href="{% url 'servidor' %}"> Portal do Servidor </a>
+          </li>
+
+          <li>
+            <a href="{% url 'servidor' %}"> PET-Saúde </a>
+          </li>
+
+          <li>
+            <a href="{% url 'ouvidoria' %}"> Reclamações </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="rodape-creditos">
+      <p>
+        © 2026 Prefeitura Municipal de Piraí — Secretaria Municipal de Saúde.
+        Todos os direitos reservados.
+      </p>
+
+      <p style="margin-top: 0.4rem">
+        Endereço: Rua Moacyr Barbosa, nº 98 — Centro, Piraí — RJ
+      </p>
+    </div>
+  </div>
+</footer>

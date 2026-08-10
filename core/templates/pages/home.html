@@ -1,5 +1,176 @@
-{% extends 'base.html' %} {% block content %}
+{% extends "base.html" %} {% block title %} Saúde Digital Piraí | Portal da
+Saúde Municipal {% endblock %} {% block description %} Portal oficial da
+Secretaria Municipal de Saúde de Piraí. Acesse serviços, encontre unidades, veja
+eventos e fique informado. {% endblock %} {% block content %}
 
-<h1>PET Saúde Digital</h1>
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div>
+      <h2>
+        Cuidando da sua saúde,
+        <em>com você</em>.
+      </h2>
+
+      <p>
+        Portal oficial da Secretaria Municipal de Saúde de Piraí. Encontre
+        serviços, unidades de saúde, eventos e tudo sobre o cuidado em saúde no
+        seu município.
+      </p>
+
+      <div class="hero-botoes">
+        <a href="{% url 'unidades' %}" class="btn btn-primario">
+          📍 Encontrar Unidade
+        </a>
+
+        <a
+          href="https://www.netlaudo.com.br/consulta/home/netlaudo.aspx"
+          target="_blank"
+          rel="noopener"
+          class="btn btn-secundario"
+        >
+          🧪 Resultados de Exames
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <h3>📞 Telefones Importantes</h3>
+
+      <ul id="lista-telefones"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section>
+  <div class="container">
+    <div class="titulo-secao">
+      <h2>Serviços de Saúde</h2>
+
+      <p>
+        Acesse rapidamente os principais serviços oferecidos à população de
+        Piraí
+      </p>
+    </div>
+
+    <div id="grid-servicos" class="grid-servicos"></div>
+  </div>
+</section>
+
+<!-- NOTÍCIAS -->
+<section class="alternada">
+  <div class="container">
+    <div class="titulo-secao">
+      <h2>Notícias</h2>
+
+      <p>Fique por dentro das ações de saúde no município</p>
+    </div>
+
+    <div id="grid-noticias" class="grid-noticias"></div>
+  </div>
+</section>
+
+<!-- EVENTOS -->
+<section>
+  <div class="container">
+    <div class="titulo-secao">
+      <h2>Próximos Eventos</h2>
+
+      <p>Campanhas, capacitações e ações de saúde abertas à comunidade</p>
+    </div>
+
+    <div id="lista-eventos" class="lista-eventos"></div>
+
+    <div style="text-align: center; margin-top: 2rem">
+      <a
+        href="{% url 'eventos' %}"
+        class="btn btn-primario"
+        style="background: var(--cor-primaria); color: white"
+      >
+        Ver todos os eventos
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PET-SAÚDE EM DESTAQUE -->
+<section class="alternada">
+  <div class="container">
+    <div
+      style="
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+      "
+      class="pet-saude-grid"
+    >
+      <div>
+        <h2
+          style="
+            font-size: 2rem;
+            color: var(--cor-primaria-escura);
+            margin-bottom: 1rem;
+          "
+        >
+          PET-Saúde em Piraí
+        </h2>
+
+        <p
+          style="
+            color: var(--cor-texto-claro);
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+          "
+        >
+          O
+          <strong> Programa de Educação pelo Trabalho para a Saúde </strong>
+          integra estudantes, professores e profissionais do SUS no
+          fortalecimento da atenção primária em Piraí.
+        </p>
+
+        <p style="color: var(--cor-texto-claro); margin-bottom: 1.5rem">
+          Saúde Digital, valorização do servidor e cuidado humanizado são os
+          eixos do programa no município.
+        </p>
+
+        <a
+          href="{% url 'profissionais' %}"
+          class="btn btn-primario"
+          style="background: var(--cor-primaria); color: white"
+        >
+          Saiba mais
+        </a>
+      </div>
+
+      <div
+        style="
+          background: linear-gradient(
+            135deg,
+            var(--cor-secundaria) 0%,
+            var(--cor-primaria) 100%
+          );
+          border-radius: 16px;
+          padding: 3rem;
+          color: white;
+          text-align: center;
+        "
+      >
+        <div style="font-size: 5rem; margin-bottom: 1rem">👨‍⚕️</div>
+
+        <p
+          style="
+            font-size: 1.1rem;
+            font-style: italic;
+            font-family: var(--fonte-titulo);
+          "
+        >
+          "A saúde se faz com gente, perto da gente."
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
 {% endblock %}

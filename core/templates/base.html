@@ -2,13 +2,39 @@
 
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
 
-    <title>Saúde Digital Piraí | Portal da Saúde Municipal</title>
-  </head>
+<head>
+  <meta charset="UTF-8" />
 
-  <body>
-    {% block content %} {% endblock %}
-  </body>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>{% block title %} Saúde Digital Piraí {% endblock %}</title>
+
+  <meta name="description" content="{% block description %}{% endblock %}" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="{% static 'css/estilo.css' %}" />
+
+  {% block extra_head %} {% endblock %}
+</head>
+
+<body>
+  {% include "components/header.html" %} {% block content %} {% endblock %} {% include "components/footer.html" %}
+
+  <!-- Dados temporários -->
+  <script src="{% static 'js/dados.js' %}"></script>
+
+  <!-- Lógica existente do portal -->
+  <script src="{% static 'js/script.js' %}"></script>
+
+  {% block extra_scripts %} {% endblock %}
+</body>
+
 </html>
