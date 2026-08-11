@@ -1,10 +1,16 @@
 from django.shortcuts import render
 from .data.unidades import UNIDADES
-
+from .data.noticias import NOTICIAS
 
 
 def home(request):
-    return render(request, "pages/home.html")
+    return render(
+        request,
+        "pages/home.html",
+        {
+            "noticias": NOTICIAS,
+        },
+    )
 
 
 def busca(request):

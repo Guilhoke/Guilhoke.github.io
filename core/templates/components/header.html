@@ -31,7 +31,7 @@
 <header class="cabecalho">
   <div class="container">
     <a href="{% url 'home' %}" class="logo">
-      <img src="{% static 'img/logo.jpg' %}" alt="Logo Saúde Digital Piraí" class="logo-imagem" />
+      <img src="{% static 'img/logo.png' %}" alt="Logo Saúde Digital Piraí" class="logo-imagem" />
 
       <div class="logo-texto">
         <h1>Saúde Digital Piraí</h1>
@@ -107,7 +107,7 @@
       </li>
 
       <li>
-        <a href="{% url 'transparencia' %}"
+        <a href="https://transparencia.pirai.rj.gov.br/"
           class="{% if request.resolver_match.url_name == 'transparencia' %}ativo{% endif %}">
           Transparência
         </a>

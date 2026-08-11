@@ -3,43 +3,83 @@ Saúde Municipal {% endblock %} {% block description %} Portal oficial da
 Secretaria Municipal de Saúde de Piraí. Acesse serviços, encontre unidades, veja
 eventos e fique informado. {% endblock %} {% block content %}
 
-<!-- HERO -->
-<section class="hero">
-  <div class="container">
-    <div>
-      <h2>
-        Cuidando da sua saúde,
-        <em>com você</em>.
-      </h2>
+<!-- HERO / CARROSSEL DE NOTÍCIAS -->
+{% load static %}
 
-      <p>
-        Portal oficial da Secretaria Municipal de Saúde de Piraí. Encontre
-        serviços, unidades de saúde, eventos e tudo sobre o cuidado em saúde no
-        seu município.
-      </p>
+<section class="hero-noticias hero-carousel">
 
-      <div class="hero-botoes">
-        <a href="{% url 'unidades' %}" class="btn btn-primario">
-          📍 Encontrar Unidade
+  {% for noticia in noticias %}
+
+  <article class="hero-slide {% if forloop.first %}ativo{% endif %}">
+    <img src="{% static noticia.imagem %}" alt="{{ noticia.titulo }}" class="hero-slide-imagem">
+
+    <div class="container hero-slide-conteudo">
+
+      <div class="hero-slide-texto">
+
+        <span class="hero-categoria">
+          Saúde Digital Piraí
+        </span>
+
+        <h2>
+          {{ noticia.titulo }}
+        </h2>
+
+        {% if noticia.link != "#" %}
+        <a href="{{ noticia.link }}" class="btn btn-primario">
+          Saiba mais →
         </a>
+        {% endif %}
 
-        <a
-          href="https://www.netlaudo.com.br/consulta/home/netlaudo.aspx"
-          target="_blank"
-          rel="noopener"
-          class="btn btn-secundario"
-        >
-          🧪 Resultados de Exames
-        </a>
+      </div>
+
+    </div>
+  </article>
+
+  {% empty %}
+
+  <article class="hero-slide ativo">
+    <div class="container">
+      <div class="hero-slide-texto">
+        <h2>
+          Cuidando da sua saúde,
+          <em>com você</em>.
+        </h2>
+
+        <p>
+          Portal oficial da Secretaria Municipal de Saúde de Piraí.
+        </p>
       </div>
     </div>
+  </article>
 
-    <div class="hero-card">
-      <h3>📞 Telefones Importantes</h3>
+  {% endfor %}
 
-      <ul id="lista-telefones"></ul>
-    </div>
+
+  {% if noticias|length > 1 %}
+
+  <button type="button" class="hero-carousel-btn hero-carousel-prev" aria-label="Notícia anterior">
+    ‹
+  </button>
+
+  <button type="button" class="hero-carousel-btn hero-carousel-next" aria-label="Próxima notícia">
+    ›
+  </button>
+
+
+  <div class="hero-carousel-indicadores">
+
+    {% for noticia in noticias %}
+
+    <button type="button" class="hero-indicador {% if forloop.first %}ativo{% endif %}"
+      aria-label="Ir para a notícia {{ forloop.counter }}"></button>
+
+    {% endfor %}
+
   </div>
+
+  {% endif %}
+
 </section>
 
 <!-- SERVIÇOS -->
@@ -83,11 +123,7 @@ eventos e fique informado. {% endblock %} {% block content %}
     <div id="lista-eventos" class="lista-eventos"></div>
 
     <div style="text-align: center; margin-top: 2rem">
-      <a
-        href="{% url 'eventos' %}"
-        class="btn btn-primario"
-        style="background: var(--cor-primaria); color: white"
-      >
+      <a href="{% url 'eventos' %}" class="btn btn-primario" style="background: var(--cor-primaria); color: white">
         Ver todos os eventos
       </a>
     </div>
@@ -97,33 +133,26 @@ eventos e fique informado. {% endblock %} {% block content %}
 <!-- PET-SAÚDE EM DESTAQUE -->
 <section class="alternada">
   <div class="container">
-    <div
-      style="
+    <div style="
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 3rem;
         align-items: center;
-      "
-      class="pet-saude-grid"
-    >
+      " class="pet-saude-grid">
       <div>
-        <h2
-          style="
+        <h2 style="
             font-size: 2rem;
             color: var(--cor-primaria-escura);
             margin-bottom: 1rem;
-          "
-        >
+          ">
           PET-Saúde em Piraí
         </h2>
 
-        <p
-          style="
+        <p style="
             color: var(--cor-texto-claro);
             margin-bottom: 1rem;
             font-size: 1.05rem;
-          "
-        >
+          ">
           O
           <strong> Programa de Educação pelo Trabalho para a Saúde </strong>
           integra estudantes, professores e profissionais do SUS no
@@ -135,17 +164,13 @@ eventos e fique informado. {% endblock %} {% block content %}
           eixos do programa no município.
         </p>
 
-        <a
-          href="{% url 'profissionais' %}"
-          class="btn btn-primario"
-          style="background: var(--cor-primaria); color: white"
-        >
+        <a href="{% url 'profissionais' %}" class="btn btn-primario"
+          style="background: var(--cor-primaria); color: white">
           Saiba mais
         </a>
       </div>
 
-      <div
-        style="
+      <div style="
           background: linear-gradient(
             135deg,
             var(--cor-secundaria) 0%,
@@ -155,17 +180,14 @@ eventos e fique informado. {% endblock %} {% block content %}
           padding: 3rem;
           color: white;
           text-align: center;
-        "
-      >
+        ">
         <div style="font-size: 5rem; margin-bottom: 1rem">👨‍⚕️</div>
 
-        <p
-          style="
+        <p style="
             font-size: 1.1rem;
             font-style: italic;
             font-family: var(--fonte-titulo);
-          "
-        >
+          ">
           "A saúde se faz com gente, perto da gente."
         </p>
       </div>
