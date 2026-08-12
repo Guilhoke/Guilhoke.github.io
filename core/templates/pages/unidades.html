@@ -68,6 +68,12 @@
 
                 <div class="imagem-unidade">
 
+                    {% if unidade.imagem %}
+
+                    <img src="{{ unidade.imagem.url }}" alt="{{ unidade.nome }}">
+
+                    {% else %}
+
                     {% if unidade.tipo == "Hospital" %}
                     🏥
                     {% elif unidade.tipo == "Unidade de Saúde da Família" %}
@@ -84,6 +90,8 @@
                     🔬
                     {% else %}
                     🏥
+                    {% endif %}
+
                     {% endif %}
 
                     <span class="tipo-tag">
@@ -110,7 +118,7 @@
 
                     <div class="acoes">
 
-                        <a href="https://www.google.com/maps/search/?api=1&query={{ unidade.lat }},{{ unidade.lng }}"
+                        <a href="https://www.google.com/maps/search/?api=1&query={{ unidade.latitude }},{{ unidade.longitude }}"
                             target="_blank" rel="noopener">
                             Ver no Mapa
                         </a>

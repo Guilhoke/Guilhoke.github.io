@@ -12,6 +12,8 @@
 
   <meta name="description" content="{% block description %}{% endblock %}" />
 
+  <link rel="icon" type="image/x-icon" href="/core/static/img/logo.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,7 +30,7 @@
 <body>
   {% include "components/header.html" %} {% block content %} {% endblock %} {% include "components/footer.html" %}
 
-  <!-- Lógica existente do portal -->
+  <!-- Lógica do portal -->
   <script src="{% static 'js/script.js' %}"></script>
 
   {% block extra_scripts %} {% endblock %}

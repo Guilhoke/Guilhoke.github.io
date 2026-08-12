@@ -1,7 +1,7 @@
 NOTICIAS = [
     {
-        "titulo": "Campanha de Vacinação contra a Gripe começa em Piraí",
-        "imagem": "img/noticias/teste.jpg",
+        "titulo": "A saúde em Piraí agora é digital!",
+        "imagem": "img/noticias/digital_health.jpg",
         "link": "#",
     },
     {

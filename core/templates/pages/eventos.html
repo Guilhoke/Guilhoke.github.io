@@ -35,15 +35,17 @@
             <article class="card-evento fade-up">
 
                 <div class="data-box">
-                    <span class="dia">{{ evento.dia }}</span>
-                    <span class="mes">{{ evento.mes }}</span>
+                    <span class="dia">{{ evento.data|date:"d" }}</span>
+                    <span class="mes">{{ evento.data|date:"M" }}</span>
                 </div>
 
                 <div>
                     <h3>{{ evento.titulo }}</h3>
 
                     <div class="info">
-                        <span>🕐 {{ evento.horario }}</span>
+                        {% if evento.horario %}
+                        <span>🕐 {{ evento.horario|time:"H:i" }}</span>
+                        {% endif %}
                         <span>📍 {{ evento.local }}</span>
                     </div>
 
@@ -97,15 +99,15 @@
                     <h3>{{ noticia.titulo }}</h3>
 
                     <p class="data">
-                        📅 {{ noticia.data }}
+                        📅 {{ noticia.data_publicacao|date:"d/m/Y" }}
                     </p>
 
                     <p>
                         {{ noticia.resumo }}
                     </p>
 
-                    {% if noticia.link %}
-                    <a href="{{ noticia.link }}">
+                    {% if noticia.link_externo %}
+                    <a href="{{ noticia.link_externo }}">
                         Saiba mais →
                     </a>
                     {% endif %}
