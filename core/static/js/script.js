@@ -124,7 +124,54 @@ function configurarCarrosselNoticias() {
   iniciarAutoPlay();
 }
 
+/* --------------------------------------------------------------------------
+   FILTRO DE UNIDADES DE SAÚDE
+   -------------------------------------------------------------------------- */
+
+function configurarFiltroUnidades() {
+  const filtros = document.querySelectorAll(".filtro-unidades button[data-filtro]");
+  const grid = document.getElementById("grid-unidades");
+
+  if (!filtros.length || !grid) return;
+
+  const cards = grid.querySelectorAll(".card-unidade[data-tipo]");
+
+  // Mensagem exibida quando um filtro não encontra nenhuma unidade
+  const semResultado = document.createElement("div");
+  semResultado.className = "bloco-info";
+  semResultado.style.display = "none";
+  semResultado.innerHTML =
+    "<strong>Nenhuma unidade encontrada para esse filtro.</strong>" +
+    "<p style=\"margin-top:0.5rem\">Tente selecionar outra categoria ou clique em \"Todas\".</p>";
+  grid.after(semResultado);
+
+  function aplicarFiltro(tipoSelecionado) {
+    let visiveis = 0;
+
+    cards.forEach((card) => {
+      const corresponde =
+        tipoSelecionado === "todos" || card.dataset.tipo === tipoSelecionado;
+
+      card.style.display = corresponde ? "" : "none";
+
+      if (corresponde) visiveis += 1;
+    });
+
+    semResultado.style.display = visiveis === 0 ? "" : "none";
+  }
+
+  filtros.forEach((botao) => {
+    botao.addEventListener("click", () => {
+      filtros.forEach((b) => b.classList.remove("ativo"));
+      botao.classList.add("ativo");
+
+      aplicarFiltro(botao.dataset.filtro);
+    });
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 
   configurarCarrosselNoticias();
+  configurarFiltroUnidades();
 });
