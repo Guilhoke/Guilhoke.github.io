@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 from django.templatetags.static import static
 from django.urls import reverse_lazy
@@ -13,6 +14,20 @@ SECRET_KEY = "django-insecure-change-this-in-production"
 DEBUG = False
 
 ALLOWED_HOSTS = []
+
+
+# ==============================================================================
+# ROTA DE ACESSO AO CMS (Django Admin)
+# Por padrão o Django usa "/admin/", um caminho muito previsível e alvo
+# constante de varreduras automatizadas. Trocamos por um caminho customizado,
+# configurável via variável de ambiente ADMIN_URL — assim o caminho real de
+# produção pode ser definido/gerado depois, sem mexer em código.
+#
+# Isso NÃO substitui autenticação forte (login/senha continuam sendo a
+# proteção real) — é só uma camada a mais que tira o painel da mira de bots
+# genéricos que testam /admin/ em qualquer domínio.
+# ==============================================================================
+ADMIN_URL = os.environ.get("ADMIN_URL", "gestao-saude-pirai-x7k2/")
 
 
 INSTALLED_APPS = [
