@@ -1,0 +1,117 @@
+{% load static %}
+
+<!-- BARRA DE ACESSIBILIDADE -->
+<div class="barra-topo">
+  <div class="container">
+    <div>
+      <span>Prefeitura Municipal de Piraí</span>
+      •
+      <span>Secretaria de Saúde</span>
+    </div>
+
+    <div class="acessibilidade">
+      <span class="label-acc">Acessibilidade:</span>
+
+      <button data-acao="diminuir-fonte" title="Diminuir texto" aria-label="Diminuir texto">
+        A−
+      </button>
+
+      <button data-acao="resetar-fonte" title="Restaurar tamanho" aria-label="Restaurar tamanho">
+        A
+      </button>
+
+      <button data-acao="aumentar-fonte" title="Aumentar texto" aria-label="Aumentar texto">
+        A+
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CABEÇALHO COM LOGO E BUSCA -->
+<header class="cabecalho">
+  <div class="container">
+    <a href="{% url 'home' %}" class="logo">
+      <img src="{% static 'img/logo.png' %}" alt="Logo Saúde Digital Piraí" class="logo-imagem" />
+
+      <div class="logo-texto">
+        <h1>Saúde Digital Piraí</h1>
+        <p>Secretaria Municipal de Saúde</p>
+      </div>
+    </a>
+
+    <form class="busca" role="search" action="{% url 'busca' %}" method="get">
+      <input type="search" name="q" placeholder="Pesquisar no site..." aria-label="Pesquisar" />
+
+      <button type="submit" aria-label="Pesquisar">🔍</button>
+
+    </form>
+
+  </div>
+</header>
+
+<!-- NAVEGAÇÃO PRINCIPAL -->
+<nav class="navbar" aria-label="Menu principal">
+  <div class="container">
+    <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+      ☰ Menu
+    </button>
+
+    <ul class="menu">
+      <li>
+        <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}ativo{% endif %}">
+          Início
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'servicos' %}" class="{% if request.resolver_match.url_name == 'servicos' %}ativo{% endif %}">
+          Serviços
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'unidades' %}" class="{% if request.resolver_match.url_name == 'unidades' %}ativo{% endif %}">
+          Unidades
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'eventos' %}" class="{% if request.resolver_match.url_name == 'eventos' %}ativo{% endif %}">
+          Eventos
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'profissionais' %}"
+          class="{% if request.resolver_match.url_name == 'profissionais' %}ativo{% endif %}">
+          Profissionais
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'servidor' %}" class="{% if request.resolver_match.url_name == 'servidor' %}ativo{% endif %}">
+          Servidor
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'ouvidoria' %}" class="{% if request.resolver_match.url_name == 'ouvidoria' %}ativo{% endif %}">
+          Ouvidoria
+        </a>
+      </li>
+
+      <li>
+        <a href="{% url 'duvidas' %}" class="{% if request.resolver_match.url_name == 'duvidas' %}ativo{% endif %}">
+          Dúvidas
+        </a>
+      </li>
+
+      <li>
+        <a href="https://transparencia.pirai.rj.gov.br/"
+          class="{% if request.resolver_match.url_name == 'transparencia' %}ativo{% endif %}">
+          Transparência
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

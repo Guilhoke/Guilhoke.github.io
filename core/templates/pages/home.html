@@ -1,0 +1,301 @@
+{% extends "base.html" %} {% block title %} Saúde Digital Piraí | Portal da
+Saúde Municipal {% endblock %} {% block description %} Portal oficial da
+Secretaria Municipal de Saúde de Piraí. Acesse serviços, encontre unidades, veja
+eventos e fique informado. {% endblock %} {% block content %}
+
+<!-- HERO / CARROSSEL DE NOTÍCIAS -->
+
+<section class="hero-noticias hero-carousel" aria-roledescription="carrossel" aria-label="Notícias em destaque">
+
+  {% for noticia in noticias %}
+
+  <article class="hero-slide {% if forloop.first %}ativo{% endif %}" aria-roledescription="slide"
+    aria-label="{{ forloop.counter }} de {{ noticias|length }}">
+
+    {% if noticia.imagem %}
+    <img src="{{ noticia.imagem.url }}" alt="" class="hero-slide-imagem" decoding="async"
+      {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+    {% endif %}
+
+    <div class="hero-slide-conteudo">
+
+      <div class="hero-slide-texto">
+
+        {% if noticia.categoria %}
+        <span class="hero-categoria">
+          {{ noticia.categoria }}
+        </span>
+        {% endif %}
+
+        <h2>
+          {{ noticia.titulo }}
+        </h2>
+
+        {% if noticia.link_externo %}
+        <a href="{{ noticia.link_externo }}" class="btn btn-primario">
+          Saiba mais →
+        </a>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </article>
+
+  {% empty %}
+
+  <article class="hero-slide ativo">
+    <div class="hero-slide-conteudo">
+      <div class="hero-slide-texto">
+        <h2>
+          Cuidando da sua saúde,
+          <em>com você</em>.
+        </h2>
+
+        <p>
+          Portal oficial da Secretaria Municipal de Saúde de Piraí.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  {% endfor %}
+
+
+  {% if noticias|length > 1 %}
+
+  <button type="button" class="hero-carousel-btn hero-carousel-prev" aria-label="Notícia anterior">
+    ‹
+  </button>
+
+  <button type="button" class="hero-carousel-btn hero-carousel-next" aria-label="Próxima notícia">
+    ›
+  </button>
+
+
+  <div class="hero-carousel-indicadores" role="tablist" aria-label="Escolher notícia">
+
+    {% for noticia in noticias %}
+
+    <button type="button" role="tab" class="hero-indicador {% if forloop.first %}ativo{% endif %}"
+      aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+      aria-label="Ir para a notícia {{ forloop.counter }}: {{ noticia.titulo }}"></button>
+
+    {% endfor %}
+
+  </div>
+
+  {% endif %}
+
+</section>
+
+<!-- SERVIÇOS -->
+<section>
+  <div class="container">
+    <div class="titulo-secao">
+      <h2>Serviços de Saúde</h2>
+
+      <p>
+        Acesse rapidamente os principais serviços oferecidos à população de
+        Piraí
+      </p>
+    </div>
+
+    <div id="grid-servicos" class="grid-servicos">
+
+      {% for servico in servicos %}
+
+      <a href="{{ servico.link }}" class="card-servico">
+        <div class="icone">{{ servico.icone }}</div>
+        <h3>{{ servico.titulo }}</h3>
+        <p>{{ servico.descricao }}</p>
+        <span class="acessar">Acessar →</span>
+      </a>
+
+      {% empty %}
+
+      <div class="bloco-info">
+        <strong>Nenhum serviço cadastrado.</strong>
+        <p style="margin-top:0.5rem">
+          Os serviços de saúde aparecerão aqui assim que forem cadastrados pelo painel administrativo.
+        </p>
+      </div>
+
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+<!-- NOTÍCIAS -->
+<section class="alternada">
+  <div class="container">
+    <div class="titulo-secao">
+      <h2>Notícias</h2>
+
+      <p>Fique por dentro das ações de saúde no município</p>
+    </div>
+
+    <div id="grid-noticias" class="grid-noticias">
+
+      {% for noticia in noticias_recentes %}
+
+      <article class="card-noticia {% if forloop.first %}destaque{% endif %}">
+
+        <div class="imagem">
+          <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}">
+        </div>
+
+        <div class="conteudo">
+
+          {% if noticia.categoria %}
+          <span class="categoria">{{ noticia.categoria }}</span>
+          {% endif %}
+
+          <h3>{{ noticia.titulo }}</h3>
+
+          <p class="data">📅 {{ noticia.data_publicacao|date:"d/m/Y" }}</p>
+
+          <p>{{ noticia.resumo }}</p>
+
+        </div>
+
+      </article>
+
+      {% empty %}
+
+      <div class="bloco-info">
+        <strong>Nenhuma notícia encontrada.</strong>
+        <p style="margin-top:0.5rem">
+          Não há notícias cadastradas no momento.
+        </p>
+      </div>
+
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+<!-- EVENTOS -->
+<section>
+  <div class="container">
+    <div class="titulo-secao">
+      <h2>Próximos Eventos</h2>
+
+      <p>Campanhas, capacitações e ações de saúde abertas à comunidade</p>
+    </div>
+
+    <div id="lista-eventos" class="lista-eventos">
+
+      {% for evento in eventos_recentes %}
+
+      <article class="card-evento">
+
+        <div class="data-box">
+          <span class="dia">{{ evento.data|date:"d" }}</span>
+          <span class="mes">{{ evento.data|date:"M" }}</span>
+        </div>
+
+        <div>
+          <h3>{{ evento.titulo }}</h3>
+
+          <div class="info">
+            {% if evento.horario %}
+            <span>🕐 {{ evento.horario|time:"H:i" }}</span>
+            {% endif %}
+            <span>📍 {{ evento.local }}</span>
+          </div>
+
+          <p>{{ evento.descricao }}</p>
+        </div>
+
+      </article>
+
+      {% empty %}
+
+      <div class="bloco-info">
+        <strong>Nenhum evento encontrado.</strong>
+        <p style="margin-top:0.5rem">
+          Não há eventos cadastrados no momento.
+        </p>
+      </div>
+
+      {% endfor %}
+
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem">
+      <a href="{% url 'eventos' %}" class="btn btn-primario" style="background: var(--cor-primaria); color: white">
+        Ver todos os eventos
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PET-SAÚDE EM DESTAQUE -->
+<section class="alternada">
+  <div class="container">
+    <div style="
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+      " class="pet-saude-grid">
+      <div>
+        <h2 style="
+            font-size: 2rem;
+            color: var(--cor-primaria-escura);
+            margin-bottom: 1rem;
+          ">
+          PET-Saúde em Piraí
+        </h2>
+
+        <p style="
+            color: var(--cor-texto-claro);
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+          ">
+          O
+          <strong> Programa de Educação pelo Trabalho para a Saúde </strong>
+          integra estudantes, professores e profissionais do SUS no
+          fortalecimento da atenção primária em Piraí.
+        </p>
+
+        <p style="color: var(--cor-texto-claro); margin-bottom: 1.5rem">
+          Saúde Digital, valorização do servidor e cuidado humanizado são os
+          eixos do programa no município.
+        </p>
+
+        <a href="{% url 'profissionais' %}" class="btn btn-primario"
+          style="background: var(--cor-primaria); color: white">
+          Saiba mais
+        </a>
+      </div>
+
+      <div style="
+          background: linear-gradient(
+            135deg,
+            var(--cor-secundaria) 0%,
+            var(--cor-primaria) 100%
+          );
+          border-radius: 16px;
+          padding: 3rem;
+          color: white;
+          text-align: center;
+        ">
+        <div style="font-size: 5rem; margin-bottom: 1rem">👨‍⚕️</div>
+
+        <p style="
+            font-size: 1.1rem;
+            font-style: italic;
+            font-family: var(--fonte-titulo);
+          ">
+          "A saúde se faz com gente, perto da gente."
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

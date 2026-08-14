@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Ouvidoria | Saúde Digital Piraí{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb">
+    <div class="container">
+        <a href="{% url 'home' %}">Início</a>
+        <span class="sep">›</span>
+        <span class="atual">Ouvidoria</span>
+    </div>
+</div>
+
+<section class="hero-pagina">
+    <div class="container">
+        <h1>Ouvidoria</h1>
+        <p>
+            Entre em contato com nossos profissionais e diga-nos oque houve. 
+        </p>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <div
+            style="background:var(--cor-primaria);color:white;padding:2rem;border-radius:12px;margin-bottom:1.5rem">
+            <h3 style="color:white;font-size:1.2rem;margin-bottom:1rem">
+                📞 Contato direto
+            </h3>
+
+            <p style="margin-bottom:0.85rem">
+                <strong style="color:var(--cor-amarelo)">
+                    Ouvidoria da Saúde
+                </strong>
+                <br>
+                2411-9328
+            </p>
+
+            <p style="margin-bottom:0.85rem">
+                <strong style="color:var(--cor-amarelo)">
+                    Ouvidoria HFL
+                </strong>
+                <br>
+                2411-9475
+            </p>
+
+            <p>
+                <strong style="color:var(--cor-amarelo)">
+                    Secretaria de Saúde
+                </strong>
+                <br>
+                24-2411-9300
+            </p>
+        </div>
+
+        <div class="bloco-info">
+            <strong>🔒 Sigilo garantido</strong>
+
+            <p style="margin-top:0.5rem;font-size:0.92rem">
+                Sua identidade é protegida. Manifestações anônimas também são aceitas,
+                mas o retorno depende dos dados informados.
+            </p>
+        </div>
+
+        <div class="bloco-info" style="border-left-color:var(--cor-primaria)">
+            <strong>⏱ Prazo de resposta</strong>
+
+            <p style="margin-top:0.5rem;font-size:0.92rem">
+                As manifestações são respondidas em até
+                <strong>20 dias úteis</strong>,
+                conforme legislação vigente.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

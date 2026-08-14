@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Serviços | Saúde Digital Piraí{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb">
+    <div class="container">
+        <a href="{% url 'home' %}">Início</a>
+        <span class="sep">›</span>
+        <span class="atual">Serviços</span>
+    </div>
+</div>
+
+<section class="hero-pagina">
+    <div class="container">
+        <h1>Serviços</h1>
+        <p>
+            Conheça os principais serviços oferecidos pela rede municipal de saúde.
+        </p>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+
+        <div class="conteudo-pagina">
+
+            <h3>🏥 Atendimento Básico (Atenção Primária)</h3>
+
+            <p>
+                Procure a
+                <strong>Unidade de Saúde da Família (USF)</strong>
+                mais próxima da sua residência.
+                As USFs oferecem consultas médicas, vacinação, curativos,
+                acompanhamento de gestantes e crianças, e ações de prevenção.
+            </p>
+
+            <h3>🩺 Especialidades Médicas</h3>
+
+            <p>
+                O
+                <strong>Centro de Especialidades Médicas</strong>
+                oferece atendimento em diversas especialidades,
+                mediante encaminhamento da sua USF.
+                Telefone: <strong>2411-9328</strong>.
+            </p>
+
+            <h3>🚑 Emergências</h3>
+
+            <p>
+                Em caso de emergência, dirija-se ao
+                <strong>Hospital Flávio Leal</strong>
+                ou ao
+                <strong>Pronto Socorro de Arrozal</strong>.
+                Em situações graves, ligue para o
+                <strong>SAMU 192</strong>.
+            </p>
+
+            <h3>🧠 Saúde Mental</h3>
+
+            <p>
+                O
+                <strong>Centro de Atenção Psicossocial (CAPS)</strong>
+                oferece acolhimento e tratamento em saúde mental.
+                Atendimento em Rua Bulhões de Carvalho, nº 1241 —
+                Tel.: <strong>2411-9342</strong>.
+            </p>
+
+            <h3>🧪 Resultados de Exames</h3>
+
+            <p>
+                Os resultados de exames laboratoriais podem ser consultados
+                no portal
+                <a href="https://www.netlaudo.com.br/consulta/home/netlaudo.aspx" target="_blank" rel="noopener">
+                    Netlaudo
+                </a>,
+                com o número do seu pedido em mãos.
+            </p>
+
+            <div class="bloco-info">
+                <strong>💡 Dica:</strong>
+
+                <p style="margin-top:0.5rem">
+                    Para serviços que exigem agendamento, ligue antes para a
+                    unidade desejada. Em caso de dúvidas sobre direitos ou
+                    reclamações, use a
+                    <a href="{% url 'ouvidoria' %}">
+                        Ouvidoria da Saúde
+                    </a>.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
