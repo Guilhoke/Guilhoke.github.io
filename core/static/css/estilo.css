@@ -344,11 +344,27 @@ textarea {
   background: var(--cor-primaria);
 }
 
+/* Todos os slides ocupam a MESMA célula de grid, empilhados um sobre o outro.
+   Diferente do position:absolute que havia aqui antes, a célula de grid é
+   dimensionada pelo slide mais alto — então a altura do carrossel passa a
+   acompanhar o conteúdo real. Um título longo em tela estreita deixa de ser
+   cortado pelo overflow:hidden, e a altura não muda de um slide para o outro
+   (nada de "pulo" no layout durante a troca). */
 .hero-carousel {
   position: relative;
+  display: grid;
+  grid-template-areas: "slide";
   width: 100%;
-  min-height: 560px;
+
+  /* Piso confortável em telas curtas, teto para não engolir a página inteira
+     em monitores grandes. */
+  min-height: clamp(380px, 62vh, 620px);
+
   overflow: hidden;
+
+  /* Evita que o navegador interprete um swipe horizontal como gesto de
+     "voltar página" enquanto o dedo está sobre o carrossel. */
+  touch-action: pan-y;
 }
 
 
@@ -357,10 +373,15 @@ textarea {
    -------------------------------------------------------------------------- */
 
 .hero-slide {
-  position: absolute;
-  inset: 0;
+  grid-area: slide;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
   width: 100%;
-  height: 100%;
+  min-width: 0;
+
   opacity: 0;
   visibility: hidden;
   transform: scale(1.02);
@@ -400,25 +421,62 @@ textarea {
     );
 }
 
+/* Em tela estreita o texto ocupa a largura toda, então um degradê apenas
+   horizontal deixa o lado direito claro demais por baixo das letras.
+   Trocamos por um degradê vertical, que escurece a base (onde ficam o texto
+   e os controles) e mantém a imagem visível no topo. */
+@media (max-width: 700px) {
+
+  .hero-slide::before {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(20, 45, 85, 0.55) 0%,
+        rgba(20, 45, 85, 0.80) 45%,
+        rgba(20, 45, 85, 0.94) 100%
+      );
+  }
+}
+
 
 /* --------------------------------------------------------------------------
    CONTEÚDO DO SLIDE
    -------------------------------------------------------------------------- */
 
+/* Espaço reservado na base para os controles (setas + indicadores), para que
+   o texto nunca fique por baixo deles. */
+.hero-carousel {
+  --altura-controles: 4.5rem;
+}
+
 .hero-slide-conteudo {
   position: relative;
   z-index: 2;
-  height: 100%;
+
+  width: 100%;
   max-width: var(--max-largura);
   margin: 0 auto;
+
+  /* Padding fluido: acompanha a largura da tela em vez de saltar entre
+     breakpoints fixos. */
   padding:
-    5rem
-    6rem;
+    clamp(3rem, 7vw, 5rem)
+    clamp(1.5rem, 5vw, 6rem)
+    calc(clamp(3rem, 7vw, 5rem) + var(--altura-controles));
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   color: var(--cor-branco);
+}
+
+.hero-slide-texto {
+  min-width: 0;
+}
+
+/* Sem controles (um único slide), o texto pode usar a altura toda. */
+.hero-carousel:not(:has(.hero-carousel-indicadores)) {
+  --altura-controles: 0rem;
 }
 
 .hero-categoria {
@@ -444,9 +502,15 @@ textarea {
 
   font-family: var(--fonte-titulo);
 
-  font-size: clamp(2.3rem, 5vw, 4.5rem);
+  font-size: clamp(1.75rem, 5vw, 4.5rem);
 
-  line-height: 1.05;
+  line-height: 1.1;
+
+  /* Títulos de notícia podem trazer palavras longas (nomes de programa,
+     URLs). Sem isto elas estouram a largura da tela no celular. */
+  overflow-wrap: anywhere;
+
+  hyphens: auto;
 }
 
 .hero-slide h2 em {
@@ -533,14 +597,27 @@ textarea {
     transform 0.2s ease;
 }
 
-.hero-carousel-btn:hover {
-  background: var(--cor-verde);
+/* `hover: hover` exclui telas de toque, onde o estado :hover fica "grudado"
+   depois do toque e a seta continuaria verde até o usuário tocar em outro
+   lugar. */
+@media (hover: hover) {
 
-  border-color: var(--cor-verde);
+  .hero-carousel-btn:hover {
+    background: var(--cor-verde);
 
-  color: var(--cor-primaria-escura);
+    border-color: var(--cor-verde);
 
-  transform: translateY(-50%) scale(1.05);
+    color: var(--cor-primaria-escura);
+
+    transform: translateY(-50%) scale(1.05);
+  }
+}
+
+.hero-carousel-btn:focus-visible,
+.hero-indicador:focus-visible {
+  outline: 3px solid var(--cor-verde);
+
+  outline-offset: 3px;
 }
 
 .hero-carousel-prev {
@@ -1749,20 +1826,8 @@ section.alternada {
 
 @media (max-width: 900px) {
 
-  .hero-carousel {
-    min-height: 500px;
-  }
-
-  .hero-slide-conteudo {
-    padding:
-      4rem
-      4rem
-      5rem;
-  }
-
-  .hero-slide h2 {
-    font-size: clamp(2rem, 8vw, 3.2rem);
-  }
+  /* A altura e o padding do hero agora são fluidos (clamp) na regra base —
+     não há mais valores fixos para sobrescrever aqui. */
 
   .hero-carousel-prev {
     left: 1rem;
@@ -1850,30 +1915,32 @@ section.alternada {
     font-size: 1.7rem;
   }
 
-  .hero-carousel {
-    min-height: 560px;
-  }
-
-  .hero-slide-conteudo {
-    padding:
-      3rem
-      1.5rem
-      5rem;
-  }
-
   .hero-slide h2 {
-    font-size: clamp(2rem, 9vw, 3rem);
+    font-size: clamp(1.7rem, 7.5vw, 2.6rem);
   }
 
   .hero-slide p {
     font-size: 1rem;
   }
 
+  /* No celular as setas saem de cima do texto (onde, com o conteúdo ocupando
+     a largura toda, elas ficavam por cima das letras) e descem para a mesma
+     linha dos indicadores: ‹ nos cantos, indicadores no centro.
+     `--altura-controles` já reserva esse espaço no padding do slide. */
   .hero-carousel-btn {
+    top: auto;
+    bottom: 1rem;
+
     width: 40px;
     height: 40px;
 
     font-size: 1rem;
+
+    transform: none;
+  }
+
+  .hero-carousel-btn:hover {
+    transform: none;
   }
 
   .hero-carousel-prev {
@@ -1884,8 +1951,22 @@ section.alternada {
     right: 0.75rem;
   }
 
+  /* 1rem (base da seta) + 20px (metade da altura) - 2px (metade da altura do
+     indicador) = mesma linha de centro das setas. */
   .hero-carousel-indicadores {
-    bottom: 1.5rem;
+    bottom: calc(1rem + 18px);
+  }
+
+  /* Alvos de toque menores em quantidade grande de slides ficam apertados;
+     a área clicável cresce sem mudar o desenho. */
+  .hero-indicador {
+    position: relative;
+  }
+
+  .hero-indicador::after {
+    content: "";
+    position: absolute;
+    inset: -14px -4px;
   }
 
   .rodape-grid {
@@ -1919,8 +2000,14 @@ section.alternada {
     display: none;
   }
 
+  /* Imprime apenas o slide visível — os demais estão empilhados na mesma
+     célula de grid e sairiam sobrepostos no papel. */
   .hero-slide {
-    position: relative;
+    display: none;
+  }
+
+  .hero-slide.ativo {
+    display: flex;
 
     opacity: 1;
     visibility: visible;
@@ -1928,8 +2015,13 @@ section.alternada {
     transform: none;
   }
 
+  .hero-carousel,
   .hero-noticias {
     min-height: auto;
+  }
+
+  .hero-slide-conteudo {
+    --altura-controles: 0rem;
   }
 }
 

@@ -5,14 +5,19 @@ eventos e fique informado. {% endblock %} {% block content %}
 
 <!-- HERO / CARROSSEL DE NOTÍCIAS -->
 
-<section class="hero-noticias hero-carousel">
+<section class="hero-noticias hero-carousel" aria-roledescription="carrossel" aria-label="Notícias em destaque">
 
   {% for noticia in noticias %}
 
-  <article class="hero-slide {% if forloop.first %}ativo{% endif %}">
-    <img src="{{ noticia.imagem.url }}" alt="{{ noticia.titulo }}" class="hero-slide-imagem">
+  <article class="hero-slide {% if forloop.first %}ativo{% endif %}" aria-roledescription="slide"
+    aria-label="{{ forloop.counter }} de {{ noticias|length }}">
 
-    <div class="container hero-slide-conteudo">
+    {% if noticia.imagem %}
+    <img src="{{ noticia.imagem.url }}" alt="" class="hero-slide-imagem" decoding="async"
+      {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+    {% endif %}
+
+    <div class="hero-slide-conteudo">
 
       <div class="hero-slide-texto">
 
@@ -40,7 +45,7 @@ eventos e fique informado. {% endblock %} {% block content %}
   {% empty %}
 
   <article class="hero-slide ativo">
-    <div class="container">
+    <div class="hero-slide-conteudo">
       <div class="hero-slide-texto">
         <h2>
           Cuidando da sua saúde,
@@ -68,12 +73,13 @@ eventos e fique informado. {% endblock %} {% block content %}
   </button>
 
 
-  <div class="hero-carousel-indicadores">
+  <div class="hero-carousel-indicadores" role="tablist" aria-label="Escolher notícia">
 
     {% for noticia in noticias %}
 
-    <button type="button" class="hero-indicador {% if forloop.first %}ativo{% endif %}"
-      aria-label="Ir para a notícia {{ forloop.counter }}"></button>
+    <button type="button" role="tab" class="hero-indicador {% if forloop.first %}ativo{% endif %}"
+      aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+      aria-label="Ir para a notícia {{ forloop.counter }}: {{ noticia.titulo }}"></button>
 
     {% endfor %}
 

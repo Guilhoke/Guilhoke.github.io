@@ -1,33 +1,101 @@
 from pathlib import Path
 import os
 
+from django.core.exceptions import ImproperlyConfigured
 from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
+
+from dotenv import load_dotenv
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
-SECRET_KEY = "django-insecure-change-this-in-production"
+# ==============================================================================
+# VARIÁVEIS DE AMBIENTE
+# Nada sensível (SECRET_KEY, senha do banco, caminho do admin) fica escrito em
+# código. Tudo vem do arquivo .env — que está no .gitignore e nunca é commitado.
+# Use .env.example como modelo para montar o .env de cada servidor.
+# ==============================================================================
+
+load_dotenv(BASE_DIR / ".env")
+
+
+def env(nome, padrao=None, obrigatoria=False):
+    """Lê uma variável de ambiente.
+
+    Com `obrigatoria=True`, a ausência da variável derruba o processo na
+    inicialização em vez de deixar o site subir com um valor inseguro —
+    é isso que impede um deploy de produção com senha/chave de exemplo.
+    """
+    valor = os.environ.get(nome, padrao)
+
+    if obrigatoria and not valor:
+        raise ImproperlyConfigured(
+            f"A variável de ambiente {nome} é obrigatória e não foi definida. "
+            f"Copie o .env.example para .env e preencha os valores."
+        )
+
+    return valor
+
+
+def env_bool(nome, padrao=False):
+    valor = os.environ.get(nome)
+
+    if valor is None:
+        return padrao
+
+    return valor.strip().lower() in ("1", "true", "yes", "on", "sim")
+
+
+def env_lista(nome, padrao=""):
+    """Lê uma variável no formato "a,b,c" e devolve uma lista limpa."""
+    bruto = os.environ.get(nome, padrao)
+
+    return [item.strip() for item in bruto.split(",") if item.strip()]
+
+
+# ==============================================================================
+# SEGURANÇA BÁSICA
+# ==============================================================================
+
+# Em produção o settings de produção torna esta variável obrigatória.
+SECRET_KEY = env("DJANGO_SECRET_KEY", "django-insecure-somente-para-desenvolvimento")
 
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env_lista("DJANGO_ALLOWED_HOSTS")
 
 
 # ==============================================================================
 # ROTA DE ACESSO AO CMS (Django Admin)
-# Por padrão o Django usa "/admin/", um caminho muito previsível e alvo
-# constante de varreduras automatizadas. Trocamos por um caminho customizado,
-# configurável via variável de ambiente ADMIN_URL — assim o caminho real de
-# produção pode ser definido/gerado depois, sem mexer em código.
 #
-# Isso NÃO substitui autenticação forte (login/senha continuam sendo a
-# proteção real) — é só uma camada a mais que tira o painel da mira de bots
-# genéricos que testam /admin/ em qualquer domínio.
+# Por padrão o Django usa "/admin/", um caminho muito previsível e alvo
+# constante de varreduras automatizadas. Aqui o caminho vem sempre da variável
+# de ambiente ADMIN_URL, então:
+#
+#   - o caminho real de produção NÃO está no repositório;
+#   - cada ambiente pode ter um caminho diferente;
+#   - trocar o caminho é editar o .env e reiniciar, sem tocar em código.
+#
+# Isso NÃO substitui autenticação forte — login/senha, cookies seguros e
+# HTTPS continuam sendo a proteção real (ver config/settings/production.py).
+# É uma camada a mais, que tira o painel da mira de bots genéricos.
 # ==============================================================================
-ADMIN_URL = os.environ.get("ADMIN_URL", "gestao-saude-pirai-x7k2/")
+
+ADMIN_URL = env("ADMIN_URL", "admin-dev/")
+
+# Normaliza: sem barra no início, com barra no fim — que é o formato que o
+# django.urls.path() espera.
+ADMIN_URL = ADMIN_URL.strip().lstrip("/")
+
+if not ADMIN_URL.endswith("/"):
+    ADMIN_URL += "/"
+
+# Opcional: lista de IPs/faixas com permissão de acessar o painel.
+# Vazia = sem restrição por IP (só a rota secreta + login protegem).
+ADMIN_IPS_PERMITIDOS = env_lista("ADMIN_IPS_PERMITIDOS")
 
 
 INSTALLED_APPS = [
@@ -53,12 +121,22 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+
+    # Serve os arquivos de /static/ direto pelo Django em produção, com cache
+    # e compressão. Precisa vir logo depois do SecurityMiddleware.
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    # Trava de IP do painel administrativo (só age se ADMIN_IPS_PERMITIDOS
+    # estiver preenchida). Depois da autenticação, para poder registrar quem
+    # tentou entrar.
+    "core.middleware.RestricaoIPAdminMiddleware",
 ]
 
 
@@ -86,10 +164,35 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 
+# ==============================================================================
+# BANCO DE DADOS — MySQL
+#
+# Todos os parâmetros vêm do .env. O charset utf8mb4 é obrigatório para que
+# acentuação e emoji (os ícones dos cards de serviço) sejam gravados corretamente.
+#
+# sql_mode=STRICT_TRANS_TABLES faz o MySQL recusar dados inválidos em vez de
+# truncar silenciosamente — é o comportamento que o Django espera.
+# ==============================================================================
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": env("DB_NAME", "saude_pirai"),
+        "USER": env("DB_USER", "root"),
+        "PASSWORD": env("DB_PASSWORD", ""),
+        "HOST": env("DB_HOST", "127.0.0.1"),
+        "PORT": env("DB_PORT", "3306"),
+        # Mantém a conexão aberta por 60s entre requisições, em vez de abrir e
+        # fechar uma conexão TCP por request.
+        "CONN_MAX_AGE": int(env("DB_CONN_MAX_AGE", "60")),
+        "OPTIONS": {
+            "charset": "utf8mb4",
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
+        "TEST": {
+            "CHARSET": "utf8mb4",
+            "COLLATION": "utf8mb4_unicode_ci",
+        },
     }
 }
 
@@ -100,6 +203,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 12},
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
@@ -138,7 +242,34 @@ MEDIA_URL = "/uploads/"
 MEDIA_ROOT = BASE_DIR / "core" / "static"
 
 
+# ==============================================================================
+# SESSÃO
+# ==============================================================================
+
+# Sessão do painel expira em 8h (um turno de trabalho) e é renovada a cada
+# requisição, para não deslogar alguém no meio de um cadastro longo.
+SESSION_COOKIE_AGE = int(env("SESSION_COOKIE_AGE", str(8 * 60 * 60)))
+
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Cookies de sessão e CSRF nunca são legíveis por JavaScript.
+SESSION_COOKIE_HTTPONLY = True
+
+CSRF_COOKIE_HTTPONLY = False  # o Django precisa lê-lo para formulários AJAX
+
+SESSION_COOKIE_SAMESITE = "Lax"
+
+CSRF_COOKIE_SAMESITE = "Lax"
+
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Limite de upload em memória (5 MB). Acima disso o arquivo vai para disco
+# temporário, o que evita que um upload gigante consuma a RAM do servidor.
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 
 
 # ==============================================================================

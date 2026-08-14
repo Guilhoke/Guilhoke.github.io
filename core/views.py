@@ -1,22 +1,54 @@
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
 
 from conteudo.models import Evento, Noticia, Servico, Unidade
 
 
-def home(request):
-    noticias_carrossel = Noticia.objects.filter(
-        publicada=True,
-        destaque_carrossel=True,
+# Quantos slides o carrossel da Home exibe, no máximo.
+MAX_SLIDES_CARROSSEL = 5
+
+# Portal de transparência da prefeitura (o município não hospeda essa página).
+URL_TRANSPARENCIA = "https://transparencia.pirai.rj.gov.br/"
+
+
+def _noticias_do_carrossel():
+    """Monta a lista de slides do carrossel da Home.
+
+    A fonte principal são as notícias marcadas como "Destaque no carrossel"
+    no painel. Quando há menos de duas marcadas, o carrossel não teria o que
+    alternar e a Home ficaria com uma imagem estática — então completamos com
+    as notícias publicadas mais recentes, sem repetir as que já entraram.
+
+    Marcar duas ou mais notícias como destaque volta a dar controle total
+    sobre o que aparece e em que ordem.
+    """
+    destaques = list(
+        Noticia.objects.filter(
+            publicada=True,
+            destaque_carrossel=True,
+        )[:MAX_SLIDES_CARROSSEL]
     )
 
+    if len(destaques) >= 2:
+        return destaques
+
+    ja_incluidas = [noticia.pk for noticia in destaques]
+
+    complemento = Noticia.objects.filter(publicada=True).exclude(
+        pk__in=ja_incluidas
+    )[: MAX_SLIDES_CARROSSEL - len(destaques)]
+
+    return destaques + list(complemento)
+
+
+def home(request):
     return render(
         request,
         "pages/home.html",
         {
-            "noticias": noticias_carrossel,
+            "noticias": _noticias_do_carrossel(),
             "servicos": Servico.objects.filter(ativo=True),
             "noticias_recentes": Noticia.objects.filter(publicada=True)[:5],
             "eventos_recentes": Evento.objects.filter(
@@ -129,7 +161,12 @@ def servidor(request):
 
 
 def transparencia(request):
-    return render(request, "pages/transparencia.html")
+    # Não existe uma página de transparência dentro deste site — o conteúdo
+    # fica no portal da prefeitura, que é para onde o menu do cabeçalho já
+    # aponta. Esta rota existe porque o rodapé e a página de dúvidas usam
+    # {% url 'transparencia' %}; ela redireciona em vez de tentar renderizar
+    # um template inexistente (que virava erro 500 com DEBUG=False).
+    return redirect(URL_TRANSPARENCIA)
 
 
 def unidades(request):
